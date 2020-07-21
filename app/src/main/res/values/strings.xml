@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">IFAI</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_uname">username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="phone">mobile number</string>
+    <string name="instr_login">You are logging in using your mobile number, a one time password is sent to your number</string>
+    <string name="verify_instr">We have sent you a otp to your mobile number please eneter it to verify</string>
+    <string name="logout">logout</string>
+    <string name="mail">email</string>
+    <string name="reg_details">since you are new user your detalis should be registered here</string>
+    <string name="d_o_b">D.O.B :-</string>
+    <string name="pick">Pick</string>
+    <string name="sign_up">register</string>
+</resources>
