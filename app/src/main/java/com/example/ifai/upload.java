@@ -3,6 +3,8 @@ package com.example.ifai;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -10,7 +12,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -19,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -26,9 +32,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -43,6 +51,7 @@ public class upload extends AppCompatActivity {
     private TextView file_path,username;
     private ImageButton back;
     private ProgressBar bar;
+    private RecyclerView submitted;
 
 
     private Uri poster_path, video_path;
@@ -50,8 +59,9 @@ public class upload extends AppCompatActivity {
     private FirebaseFirestore firestore;
     String poster_uri,film_uri;
     String UID;
+    private FirestoreRecyclerAdapter madapter;
 
-    String title,desc;
+//    String title,desc;
 
 
 
@@ -64,6 +74,11 @@ public class upload extends AppCompatActivity {
         film_title = findViewById(R.id.film_name);
         username = findViewById(R.id.username);
         bar = findViewById(R.id.loading);
+        submitted = findViewById(R.id.submitted);
+
+        submitted.setHasFixedSize(true);
+        submitted.setLayoutManager(new LinearLayoutManager(this));
+
 
 
 //        title = film_title.getText().toString();
@@ -99,6 +114,7 @@ public class upload extends AppCompatActivity {
             }
         });
 
+        submitted();
 
 
 
@@ -191,10 +207,10 @@ public class upload extends AppCompatActivity {
     private void SaveDatatoFirestore() {
         DocumentReference reference = firestore.collection("films").document(UID).collection("submitted").document(film_title.getText().toString());                                   //document(UID + film_title.getText().toString());
         Map<String,Object> film = new HashMap<>();
-        film.put("film title",film_title.getText().toString());
+        film.put("film_title",film_title.getText().toString());
         film.put("description",description.getText().toString());
-        film.put("poster uri",poster_uri);
-        film.put("film uri",film_uri);
+        film.put("poster_uri",poster_uri);
+        film.put("film_uri",film_uri);
         reference.set(film).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -230,5 +246,65 @@ public class upload extends AppCompatActivity {
 
     }
 
+    //view Holder here
+    private class FilmsViewHolder extends RecyclerView.ViewHolder {
 
+        private View mview;
+
+        public FilmsViewHolder(@NonNull View itemView) {
+            super(itemView);
+            mview = itemView;
+        }
+
+        public void setPoster(upload upload, String film_poster) {
+            ImageView poster = mview.findViewById(R.id.poster_view);
+            Picasso.get().load(film_poster).into(poster);
+            Picasso.get().setLoggingEnabled(true);
+        }
+
+        public void setTitle(String film_title) {
+            TextView title = mview.findViewById(R.id.film_title);
+            title.setText(film_title);
+        }
+    }
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        madapter.startListening();
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        madapter.stopListening();
+//    }
+
+
+    //code to load the list of submitted films into recycles view
+    private void submitted(){
+        //Query to get documents from firestore
+        Query query = firestore.collection("films").document(UID).collection("submitted");
+        //RecyclerOptions
+        FirestoreRecyclerOptions<FilmsModel> options = new FirestoreRecyclerOptions.Builder<FilmsModel>().
+                setQuery(query,FilmsModel.class).build();
+
+        madapter = new FirestoreRecyclerAdapter<FilmsModel, FilmsViewHolder>(options) {
+            @NonNull
+            @Override
+            public FilmsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.film_poster,parent,false);
+                return new FilmsViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull FilmsViewHolder holder, int position, @NonNull FilmsModel model) {
+                System.out.println("aaaaaaaaaaa"+ model.getFilm_title());
+                holder.setTitle(model.getFilm_title());
+                holder.setPoster(upload.this,model.getPoster_uri());
+            }
+        };
+        submitted.setAdapter(madapter);
+        madapter.startListening();
+    }
 }
