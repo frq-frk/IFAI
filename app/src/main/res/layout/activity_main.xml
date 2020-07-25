@@ -21,16 +21,29 @@
     <LinearLayout
         android:layout_height="50dp"
         android:layout_width="match_parent"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:background="@color/colorPrimary">
 
+        <TextView android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Film with Passion"
+            android:textSize="20sp"
+            android:textColor="@color/colorAccent"
+            android:layout_marginLeft="40dp"
+            android:clickable="true"
+            android:id="@+id/admin_link"
+            android:onClick="admin_login"
+            android:layout_marginStart="40dp"
+            android:focusable="true" />
+
         <ImageButton
-            android:layout_height="50dp"
+            android:id="@+id/upload_btn"
             android:layout_width="50dp"
+            android:layout_height="match_parent"
             android:layout_gravity="end"
             android:background="@color/colorPrimary"
-            android:src="@drawable/ic_file_upload_black_24dp"
-            android:id="@+id/upload_btn"/>
+            android:layout_marginLeft="140dp"
+            android:src="@drawable/ic_file_upload_black_24dp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

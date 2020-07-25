@@ -103,7 +103,7 @@
             android:text="Submitted films"
             android:textSize="20sp"/>
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_height="230dp"
+            android:layout_height="270dp"
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:id="@+id/submitted"/>
@@ -113,7 +113,7 @@
             android:text="Streaming films"
             android:textSize="20sp"/>
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_height="230dp"
+            android:layout_height="270dp"
             android:layout_width="match_parent"
             android:orientation="horizontal"
             android:id="@+id/streaming"/>

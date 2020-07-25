@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +46,9 @@ import java.util.UUID;
 
 public class upload extends AppCompatActivity {
 
+    private long mLastClickTime = 0;
+
+
     private ImageView poster;
     private EditText description,film_title;
     private Button chose_file,submit,logout;
@@ -60,6 +64,7 @@ public class upload extends AppCompatActivity {
     String poster_uri,film_uri;
     String UID;
     private FirestoreRecyclerAdapter madapter;
+    private LinearLayoutManager manager;
 
 //    String title,desc;
 
@@ -76,8 +81,12 @@ public class upload extends AppCompatActivity {
         bar = findViewById(R.id.loading);
         submitted = findViewById(R.id.submitted);
 
+        manager = new LinearLayoutManager(this);
+        manager.setOrientation(RecyclerView.HORIZONTAL);
+
         submitted.setHasFixedSize(true);
-        submitted.setLayoutManager(new LinearLayoutManager(this));
+
+        submitted.setLayoutManager(manager);
 
 
 
@@ -151,6 +160,11 @@ public class upload extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
               bar.setVisibility(View.VISIBLE);
              final StorageReference poster = mStorageRef.child("potsers").child(UID + UUID.randomUUID().toString());   //at first poster is saved in storage of firebase
              poster.putFile(poster_path).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -299,7 +313,7 @@ public class upload extends AppCompatActivity {
 
             @Override
             protected void onBindViewHolder(@NonNull FilmsViewHolder holder, int position, @NonNull FilmsModel model) {
-                System.out.println("aaaaaaaaaaa"+ model.getFilm_title());
+                System.out.println("aaaaaaaaaaa"+ model.getFilm_title());  //for debugging purpose
                 holder.setTitle(model.getFilm_title());
                 holder.setPoster(upload.this,model.getPoster_uri());
             }
