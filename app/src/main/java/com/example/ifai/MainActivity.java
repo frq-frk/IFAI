@@ -1,7 +1,10 @@
 package com.example.ifai;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -10,20 +13,33 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.squareup.picasso.Picasso;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageButton upload;
+    private ImageButton upload;
+    private RecyclerView mv_list;
+
+    private FirebaseFirestore firestore;
+    private FirestoreRecyclerAdapter madapter;
+    private LinearLayoutManager manager;
 
     boolean doubleBackToExitPressedOnce = false, clicked = false;
     int count=1;
@@ -33,16 +49,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         upload = findViewById(R.id.upload_btn);
+        mv_list = findViewById(R.id.mv_list);
 
-//        Button button = findViewById(R.id.clickme);
-//
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(MainActivity.this,Stream.class);
-//                startActivity(intent);
-//            }
-//        });
+        manager = new LinearLayoutManager(this);
+
+        mv_list.setHasFixedSize(true);
+        mv_list.setLayoutManager(manager);
+
+        firestore = FirebaseFirestore.getInstance();
+
 
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +67,69 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        streaming();
+    }
+
+    //viewHolder class here
+
+    private class MovieViewHolder extends RecyclerView.ViewHolder{
+
+        private View mview;
+
+        public MovieViewHolder(@NonNull View itemView) {
+            super(itemView);
+            mview = itemView;
+        }
+
+        public void setTitle(String film_title) {
+            TextView title = mview.findViewById(R.id.mv_title);
+            title.setText(film_title);
+        }
+
+        public void setPoster(MainActivity mainActivity, String poster_uri) {
+            ImageView poster = mview.findViewById(R.id.mv_poster);
+            Picasso.get().load(poster_uri).into(poster);
+            Picasso.get().setLoggingEnabled(true);
+        }
+
+        public void setMaker(String uname) {
+            String maker = "maker : " + uname;
+            TextView director = mview.findViewById(R.id.maker);
+            director.setText(maker);
+        }
+
+        public void setDescription(String description) {
+            TextView desc = mview.findViewById(R.id.description);
+            desc.setText(description);
+        }
+    }
+
+    private void streaming() {
+        //Query to get documents from firestore
+        Query query = firestore.collection("streaming");
+        //RecyclerOptions
+        FirestoreRecyclerOptions<Streaming> options = new FirestoreRecyclerOptions.Builder<Streaming>().
+                setQuery(query,Streaming.class).build();
+
+        madapter = new FirestoreRecyclerAdapter<Streaming, MovieViewHolder>(options){
+            @NonNull
+            @Override
+            public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mv_view,parent,false);
+                return new MovieViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull MovieViewHolder holder, int position, @NonNull Streaming model) {
+                holder.setTitle(model.getFilm_title());
+                holder.setPoster(MainActivity.this,model.getPoster_uri());
+//                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + model.getDescription());
+                holder.setDescription(model.getDescription());
+                holder.setMaker(model.getUname());
+            }
+        };
+        mv_list.setAdapter(madapter);
+        madapter.startListening();
     }
 
     @Override

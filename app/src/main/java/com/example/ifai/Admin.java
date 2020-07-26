@@ -31,7 +31,7 @@ public class Admin extends AppCompatActivity {
                             if(queryDocumentSnapshots.isEmpty()){
                                 Toast.makeText(Admin.this, "error in getting user count", Toast.LENGTH_SHORT).show();
                             }else{
-                                String c = String.valueOf(queryDocumentSnapshots.size());
+                                String c = String.valueOf(queryDocumentSnapshots.size() - 1);
                                 count.setText(c);
                             }
                     }

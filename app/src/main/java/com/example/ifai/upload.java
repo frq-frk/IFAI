@@ -313,7 +313,7 @@ public class upload extends AppCompatActivity {
 
             @Override
             protected void onBindViewHolder(@NonNull FilmsViewHolder holder, int position, @NonNull FilmsModel model) {
-                System.out.println("aaaaaaaaaaa"+ model.getFilm_title());  //for debugging purpose
+//                System.out.println("aaaaaaaaaaa"+ model.getFilm_title());  //for debugging purpose
                 holder.setTitle(model.getFilm_title());
                 holder.setPoster(upload.this,model.getPoster_uri());
             }
