@@ -1,14 +1,7 @@
 package com.example.ifai;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,17 +9,21 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
@@ -159,57 +156,62 @@ public class MainActivity extends AppCompatActivity {
     public void admin_login(View view) {
 
         if(clicked) {
-            //todo the action here
-            //i.e open dialog prompting password
-            final EditText edittext = new EditText(view.getContext());
-            edittext.setBackgroundColor(R.color.background);
-            edittext.setHint("Password");
-            edittext.setFocusable(true);
-            edittext.setTextColor(R.color.colorAccent);
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                //todo the action here
+                //i.e open dialog prompting password
+                final EditText edittext = new EditText(view.getContext());
+                edittext.setBackgroundColor(R.color.background);
+                edittext.setHint("Password");
+                edittext.setFocusable(true);
+                edittext.setTextColor(R.color.colorAccent);
 
-            final AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+                final AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
 
-            alert.setTitle("Welcome Admin");
-            alert.setMessage("Enter the password");
-            alert.setView(edittext);
-            alert.setCancelable(true);
-            alert.setPositiveButton("Login", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    String pwd = edittext.getText().toString();
-                    if (pwd.equals("Jormale 2020")) {
-                        Intent intent = new Intent(MainActivity.this, Admin.class);
-                        startActivity(intent);
-                    }else{
-                        Toast.makeText(MainActivity.this, "Wrong Password", Toast.LENGTH_SHORT).show();
+                alert.setTitle("Welcome Admin");
+                alert.setMessage("Enter the password");
+                alert.setView(edittext);
+                alert.setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String pwd = edittext.getText().toString();
+                        if (pwd.equals("Jormale 2020")) {
+                            Intent intent = new Intent(MainActivity.this, Admin.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(MainActivity.this, "Wrong Password", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //kill the dialog
+                        dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog dialog = alert.create();
+                dialog.show();
+
+                dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.background));
+                dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.background));
+            }else {
+                Toast.makeText(this, "you must be a user first to get admin access", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+            if (count == 4) {
+                Toast.makeText(MainActivity.this, "you click one more time to reach admin dialog", Toast.LENGTH_SHORT).show();
+                clicked = true;
+                count = 0;
+            }
+            count += 1;
+            new Handler().postDelayed(new Runnable() {
+
                 @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    //kill the dialog
-                      dialogInterface.dismiss();
+                public void run() {
+                    clicked = false;
                 }
-            });
-            AlertDialog dialog = alert.create();
-            dialog.show();
+            }, 2000);
 
-            dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.background));
-            dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.background));
+
         }
-
-                if(count == 4) {
-        Toast.makeText(MainActivity.this, "you click one more time to reach admin dialog", Toast.LENGTH_SHORT).show();
-        clicked = true;
-        count = 1;
-    }
-    count += 1;
-                new Handler().postDelayed(new Runnable() {
-
-        @Override
-        public void run() {
-            clicked=false;
-        }
-    }, 2000);
-    }
 }

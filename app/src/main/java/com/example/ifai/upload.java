@@ -1,12 +1,5 @@
 package com.example.ifai;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -23,6 +16,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -219,12 +218,13 @@ public class upload extends AppCompatActivity {
     //this is called from on submit click functionality after storing the image and video into storage reference
     //here along with the title and description we store the poster uri and video uri which are stored in string variable in on submit click function.
     private void SaveDatatoFirestore() {
-        DocumentReference reference = firestore.collection("films").document(UID).collection("submitted").document(film_title.getText().toString());                                   //document(UID + film_title.getText().toString());
+        DocumentReference reference = firestore.collection("films").document(film_title.getText().toString());                                   //document(UID + film_title.getText().toString());
         Map<String,Object> film = new HashMap<>();
         film.put("film_title",film_title.getText().toString());
         film.put("description",description.getText().toString());
         film.put("poster_uri",poster_uri);
         film.put("film_uri",film_uri);
+        film.put("uid",UID);
         reference.set(film).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -298,7 +298,7 @@ public class upload extends AppCompatActivity {
     //code to load the list of submitted films into recycles view
     private void submitted(){
         //Query to get documents from firestore
-        Query query = firestore.collection("films").document(UID).collection("submitted");
+        Query query = firestore.collection("films").whereEqualTo("uid",UID);
         //RecyclerOptions
         FirestoreRecyclerOptions<FilmsModel> options = new FirestoreRecyclerOptions.Builder<FilmsModel>().
                 setQuery(query,FilmsModel.class).build();

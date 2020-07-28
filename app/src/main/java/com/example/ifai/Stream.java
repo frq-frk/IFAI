@@ -1,16 +1,12 @@
 package com.example.ifai;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
+import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.MediaController;
-import android.widget.VideoView;
 
-import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Stream extends AppCompatActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener {
 
@@ -18,7 +14,7 @@ public class Stream extends AppCompatActivity implements SurfaceHolder.Callback,
     private MediaPlayer mediaPlayer;
     private SurfaceHolder vidHolder;
     private SurfaceView vidSurface;
-    String vidAddress = "gs://ifai-bf8dc.appspot.com/07 Configuring Your Network.mp4";
+    String vidAddress, title, posAddress, description,uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +24,11 @@ public class Stream extends AppCompatActivity implements SurfaceHolder.Callback,
         vidHolder = vidSurface.getHolder();
         vidHolder.addCallback(this);
 
-
+        vidAddress = getIntent().getStringExtra("film_url");
+        posAddress = getIntent().getStringExtra("poster_url");
+        title = getIntent().getStringExtra("title");
+        description = getIntent().getStringExtra("description");
+        uid = getIntent().getStringExtra("uid");
     }
 
     @Override

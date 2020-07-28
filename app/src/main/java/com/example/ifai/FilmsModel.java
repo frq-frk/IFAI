@@ -1,19 +1,23 @@
 package com.example.ifai;
 
-import android.net.Uri;
 
 class FilmsModel {
 
-    String description,film_title,film_uri,poster_uri;
+    String description;
+    String film_title;
+    String film_uri;
+    String poster_uri;
+    String uid;
 
     public FilmsModel() {
     }
 
-    public FilmsModel(String description, String film_title, String film_uri, String poster_uri) {
+    public FilmsModel(String description, String film_title, String film_uri, String poster_uri, String uid) {
         this.description = description;
         this.film_title = film_title;
         this.film_uri = film_uri;
         this.poster_uri = poster_uri;
+        this.uid = uid;
     }
 
     public String getDescription() {
@@ -46,5 +50,13 @@ class FilmsModel {
 
     public void setPoster_uri(String poster_uri) {
         this.poster_uri = poster_uri;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }
