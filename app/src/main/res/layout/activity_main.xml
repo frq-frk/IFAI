@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/app_design_bg2">
 
 <!--    <Button-->
 <!--        android:layout_width="wrap_content"-->
@@ -21,13 +20,12 @@
     <LinearLayout
         android:layout_height="50dp"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:background="@color/colorPrimary">
+        android:orientation="horizontal">
 
         <TextView android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="Film with Passion"
-            android:textSize="20sp"
+            android:text="IFAI"
+            android:textSize="30sp"
             android:textColor="@color/colorAccent"
             android:layout_marginLeft="40dp"
             android:clickable="true"
@@ -41,8 +39,8 @@
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:background="@color/colorPrimary"
-            android:layout_marginLeft="140dp"
+            android:background="#ffffff"
+            android:layout_marginLeft="250dp"
             android:src="@drawable/ic_file_upload_black_24dp" />
     </LinearLayout>
 

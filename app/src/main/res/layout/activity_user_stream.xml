@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Stream"
+    android:orientation="vertical"
+    tools:context=".user_stream"
     android:background="@drawable/app_design_bg2">
 
     <SurfaceView
         android:id="@+id/surfView"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="300dp"
         android:padding="10dp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Views"/>
+
+    </LinearLayout>
+
 
     <LinearLayout android:layout_height="200dp"
         android:layout_width="match_parent"
@@ -38,24 +50,14 @@
 
     </LinearLayout>
 
-
-        <Button
-            style="@style/buttons"
-            android:id="@+id/delete"
-            android:text="delete"
-            android:layout_marginTop="10dp"/>
-
-        <Button
-            style="@style/buttons"
-            android:id="@+id/accept"
-            android:text="accept"
-            android:layout_marginTop="10dp"/>
-
-    <ProgressBar
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_gravity="center"
-        android:id="@+id/bar"/>
+        android:id="@+id/maker"/>
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/contact"/>
+
+</LinearLayout>

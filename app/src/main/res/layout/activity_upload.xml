@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
-    tools:context=".upload">
+    tools:context=".upload"
+    android:background="@drawable/app_design_bg2">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,34 +12,29 @@
 
     <LinearLayout
         android:layout_height="50dp"
-        android:layout_width="match_parent"
-        android:background="@color/colorPrimaryDark">
+        android:layout_width="match_parent">
         <ImageButton
             android:layout_height="50dp"
             android:layout_width="50dp"
-            android:background="@color/colorPrimaryDark"
+            android:background="#ffffff"
             android:src="@drawable/ic_keyboard_backspace_black_24dp"
             android:layout_gravity="start"
             android:id="@+id/back"/>
-    </LinearLayout>
 
-     <LinearLayout
-         android:layout_height="40dp"
-         android:layout_width="match_parent">
-    <TextView
-        android:layout_height="match_parent"
-        android:layout_width="300dp"
-        android:hint="Username"
-        android:textSize="25sp"
-        android:textColor="@color/colorPrimaryDark"
-        android:textAlignment="center"
-        android:id="@+id/username"/>
+        <TextView
+            android:layout_height="match_parent"
+            android:layout_width="300dp"
+            android:hint="Username"
+            android:textSize="25sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textAlignment="center"
+            android:id="@+id/username"/>
         <Button
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            style="@style/buttons"
             android:text="@string/logout"
             android:id="@+id/logout"/>
-     </LinearLayout>
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -48,19 +42,20 @@
         <ImageView
             android:layout_height="match_parent"
             android:layout_width="120dp"
-            android:src="@drawable/ic_photo_camera_black_24dp"
+            android:src="@drawable/ic_photo_black_24dp"
             android:id="@+id/poster"
-            android:focusable="auto"/>
+            android:focusable="auto" />
         <EditText
             android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:background="@drawable/edittext_border"
+            android:gravity="center_horizontal"
             android:hint="Enter Description"
             android:id="@+id/desc" />
     </LinearLayout>
 
         <EditText
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
+            style="@style/edittexts"
             android:inputType="text"
             android:id="@+id/film_name"
             android:hint="Enter the film title"
@@ -73,24 +68,29 @@
     <Button
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
+        android:textColor="#ffffff"
+        android:background="@drawable/rounded_corners"
         android:text="Choose file"
         android:id="@+id/chose_file"
         android:paddingRight="15dp"/>
         <TextView
             android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:background="@drawable/edittext_border"
             android:hint="File path"
-            android:padding="5dp"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="5dp"
             android:id="@+id/file_path"/>
     </LinearLayout>
         <LinearLayout android:layout_height="wrap_content"
             android:layout_width="wrap_content">
             <Button
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
+                style="@style/buttons"
                 android:text="Submit"
                 android:layout_marginLeft="150dp"
                 android:id="@+id/submit"/>
+
             <ProgressBar android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:padding="5dp"
@@ -99,9 +99,12 @@
         </LinearLayout>
         <TextView
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:text="Submitted films"
-            android:textSize="20sp"/>
+            android:background="#000000"
+            android:textSize="20sp"
+            android:textColor="#ffff"
+            android:layout_marginTop="5dp"/>
         <androidx.recyclerview.widget.RecyclerView
             android:layout_height="270dp"
             android:layout_width="match_parent"
@@ -109,8 +112,10 @@
             android:id="@+id/submitted"/>
         <TextView
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:text="Streaming films"
+            android:textColor="#ffff"
+            android:background="#000000"
             android:textSize="20sp"/>
         <androidx.recyclerview.widget.RecyclerView
             android:layout_height="270dp"

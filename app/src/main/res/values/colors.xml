@@ -2,6 +2,6 @@
 <resources>
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#ffffff</color>
-    <color name="background">#70706E</color>
+    <color name="colorAccent">#000000</color>
+    <color name="card_bg">#4B000000</color>
 </resources>

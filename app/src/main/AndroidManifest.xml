@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Admin"></activity>
+        <activity android:name=".user_stream"></activity>
+        <activity android:name=".Admin" />
         <activity android:name=".Verify_phone" />
         <activity android:name=".Login" />
         <activity android:name=".signup" />

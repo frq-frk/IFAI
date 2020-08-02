@@ -2,18 +2,27 @@ package com.example.ifai;
 
 public class Streaming {
 
-     private String description,film_title,film_uri,poster_uri,uname,email;
+     private String description,film_title,film_uri,poster_uri,uname,email,uid;
 
     public Streaming() {
     }
 
-    public Streaming(String description, String film_title, String film_uri, String poster_uri, String uname, String email) {
+    public Streaming(String description, String film_title, String film_uri, String poster_uri, String uname, String email, String uid) {
         this.description = description;
         this.film_title = film_title;
         this.film_uri = film_uri;
         this.poster_uri = poster_uri;
         this.uname = uname;
         this.email = email;
+        this.uid = uid;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getDescription() {

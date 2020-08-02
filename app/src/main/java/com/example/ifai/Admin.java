@@ -53,6 +53,8 @@ public class Admin extends AppCompatActivity {
 
         firestore = FirebaseFirestore.getInstance();
 
+        //code to diplay the total number of users
+        //not included to view details of users yet
         firestore.collection("Users").get().
                 addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -66,9 +68,12 @@ public class Admin extends AppCompatActivity {
                     }
                 });
 
+        //calling a method to display the list of pending films to be accepted
         submitted();
 
     }
+
+    //method to display the list of pending films to be accepted
 
     private void submitted() {
         //query to get data from firebase
@@ -93,11 +98,12 @@ public class Admin extends AppCompatActivity {
                 holder.setDescription(model.getDescription());
                 holder.mview.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(Admin.this,Stream.class);
+                    public void onClick(View view) {    //on click listeners for items in recycler view
+                        Intent intent = new Intent(Admin.this,Stream.class); //redirects to the stream activity where the video is played
                         intent.putExtra("title",model.getFilm_title());
                         intent.putExtra("film_url",model.getFilm_uri());
                         intent.putExtra("poster_uri",model.getPoster_uri());
+//                        System.out.println(model.getPoster_uri() + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                         intent.putExtra("description",model.getDescription());
                         intent.putExtra("uid",model.getUid());
                         startActivity(intent);
@@ -136,5 +142,12 @@ public class Admin extends AppCompatActivity {
             desc.setText(description);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(Admin.this,MainActivity.class);
+        startActivity(intent);
     }
+}
 

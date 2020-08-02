@@ -117,12 +117,24 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull MovieViewHolder holder, int position, @NonNull Streaming model) {
+            protected void onBindViewHolder(@NonNull MovieViewHolder holder, int position, @NonNull final Streaming model) {
                 holder.setTitle(model.getFilm_title());
                 holder.setPoster(MainActivity.this,model.getPoster_uri());
-//                System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + model.getDescription());
                 holder.setDescription(model.getDescription());
                 holder.setMaker(model.getUname());
+                holder.mview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(MainActivity.this,user_stream.class);
+                        intent.putExtra("title",model.getFilm_title());
+                        intent.putExtra("description",model.getDescription());
+                        intent.putExtra("email",model.getEmail());
+                        intent.putExtra("uname",model.getUname());
+                        intent.putExtra("film_uri",model.getFilm_uri());
+                        intent.putExtra("poster_uri",model.getPoster_uri());
+                        startActivity(intent);
+                    }
+                });
             }
         };
         mv_list.setAdapter(madapter);
@@ -160,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                 //todo the action here
                 //i.e open dialog prompting password
                 final EditText edittext = new EditText(view.getContext());
-                edittext.setBackgroundColor(R.color.background);
+                edittext.setBackgroundColor(R.color.colorPrimary);
                 edittext.setHint("Password");
                 edittext.setFocusable(true);
                 edittext.setTextColor(R.color.colorAccent);
@@ -191,8 +203,8 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog dialog = alert.create();
                 dialog.show();
 
-                dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.background));
-                dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.background));
+                dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
             }else {
                 Toast.makeText(this, "you must be a user first to get admin access", Toast.LENGTH_SHORT).show();
             }

@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background"
+    android:background="@drawable/app_design_fg"
     tools:context=".Verify_phone">
 
 
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="300dp"
+            android:layout_marginLeft="10dp"
             android:text="@string/verify_instr"
             android:textSize="20sp"/>
 
-        <EditText
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="25dp">
+        <EditText
+            android:layout_height="50dp"
             android:layout_width="170sp"
-            android:layout_marginTop="80dp"
             android:layout_marginLeft="35dp"
+            style="@style/edittexts"
             android:inputType="number"
             android:hint="enter otp"
             android:textSize="25sp"
@@ -29,17 +33,20 @@
         <Button
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            style="@style/buttons"
             android:text="verify"
             android:layout_gravity="end"
+            android:layout_marginLeft="10dp"
             android:textSize="25sp"
             android:id="@+id/verify"/>
+        </LinearLayout>
 
-        <TextView
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="Resend otp"
-            android:textSize="25sp"
-            android:layout_marginTop="20dp"/>
+<!--        <TextView-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:text="Resend otp"-->
+<!--            android:textSize="25sp"-->
+<!--            android:layout_marginTop="20dp"/>-->
 
         <ProgressBar
             android:layout_height="wrap_content"

@@ -54,7 +54,7 @@ public class upload extends AppCompatActivity {
     private TextView file_path,username;
     private ImageButton back;
     private ProgressBar bar;
-    private RecyclerView submitted;
+    private RecyclerView submitted,streaming;
 
 
     private Uri poster_path, video_path;
@@ -62,8 +62,8 @@ public class upload extends AppCompatActivity {
     private FirebaseFirestore firestore;
     String poster_uri,film_uri;
     String UID;
-    private FirestoreRecyclerAdapter madapter;
-    private LinearLayoutManager manager;
+    private FirestoreRecyclerAdapter madapter,sadapter;
+    private LinearLayoutManager manager,smanager;
 
 //    String title,desc;
 
@@ -79,13 +79,19 @@ public class upload extends AppCompatActivity {
         username = findViewById(R.id.username);
         bar = findViewById(R.id.loading);
         submitted = findViewById(R.id.submitted);
+        streaming = findViewById(R.id.streaming);
 
         manager = new LinearLayoutManager(this);
         manager.setOrientation(RecyclerView.HORIZONTAL);
-
         submitted.setHasFixedSize(true);
-
         submitted.setLayoutManager(manager);
+
+        smanager = new LinearLayoutManager(this);
+        smanager.setOrientation(RecyclerView.HORIZONTAL);
+        streaming.setHasFixedSize(true);
+        streaming.setLayoutManager(smanager);
+
+
 
 
 
@@ -123,6 +129,8 @@ public class upload extends AppCompatActivity {
         });
 
         submitted();
+
+        streaming();
 
 
 
@@ -321,4 +329,33 @@ public class upload extends AppCompatActivity {
         submitted.setAdapter(madapter);
         madapter.startListening();
     }
+
+        //code to load the list of submitted files into recycler view
+
+    private void streaming() {
+        //Query
+        Query query = firestore.collection("streaming").whereEqualTo("uid",UID);
+        //recycler options
+        FirestoreRecyclerOptions<Streaming> options = new FirestoreRecyclerOptions.Builder<Streaming>().
+                setQuery(query,Streaming.class).build();
+        sadapter = new FirestoreRecyclerAdapter<Streaming, FilmsViewHolder>(options) {
+
+            @NonNull
+            @Override
+            public FilmsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.film_poster,parent,false);
+                return new FilmsViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(@NonNull FilmsViewHolder holder, int position, @NonNull Streaming model) {
+                holder.setTitle(model.getFilm_title());
+                holder.setPoster(upload.this,model.getPoster_uri());
+            }
+        };
+
+        streaming.setAdapter(sadapter);
+        sadapter.startListening();
+    }
+
 }
