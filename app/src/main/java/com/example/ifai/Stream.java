@@ -1,15 +1,19 @@
 package com.example.ifai;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +31,7 @@ import com.squareup.picasso.Picasso;
 import java.util.HashMap;
 import java.util.UUID;
 
-public class Stream extends AppCompatActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener {
+public class Stream extends AppCompatActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener,MediaController.MediaPlayerControl {
 
 
     private MediaPlayer mediaPlayer;
@@ -37,11 +41,16 @@ public class Stream extends AppCompatActivity implements SurfaceHolder.Callback,
     private TextView ttl,desc;
     private ImageView pstr;
     private Button delete,accept;
-    private ProgressBar bar;
+    private ProgressBar bar,buffer;
 
     FirebaseFirestore firestore;
 
+    private MediaController mediaController;
 
+    Handler handler = new Handler();
+
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,12 +60,24 @@ public class Stream extends AppCompatActivity implements SurfaceHolder.Callback,
         desc = findViewById(R.id.mv_info);
         pstr = findViewById(R.id.pstr);
         bar = findViewById(R.id.bar);
+        buffer = findViewById(R.id.buffer);
 
         firestore = FirebaseFirestore.getInstance();
 
-        vidSurface = (SurfaceView) findViewById(R.id.surfView);
+        vidSurface = findViewById(R.id.surfView);
         vidHolder = vidSurface.getHolder();
         vidHolder.addCallback(this);
+
+        vidSurface.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if(mediaController != null){
+                    mediaController.show();
+                }
+                return false;
+            }
+        });
+
 
         vidAddress = getIntent().getStringExtra("film_url");
         posAddress = getIntent().getStringExtra("poster_uri");
@@ -164,6 +185,7 @@ public class Stream extends AppCompatActivity implements SurfaceHolder.Callback,
         film.put("email",email);
         film.put("uname",uname);
         film.put("uid",uid);
+        film.put("views","0");
         reference.set(film).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -192,8 +214,29 @@ public class Stream extends AppCompatActivity implements SurfaceHolder.Callback,
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-
         mediaPlayer.start();
+
+        mediaController.setMediaPlayer(this);
+        mediaController.setAnchorView(vidSurface);
+        handler.post(new Runnable() {
+            public void run() {
+                mediaController.setEnabled(true);
+                mediaController.show();
+            }
+        });
+
+        mediaPlayer.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+            @Override
+            public boolean onInfo(MediaPlayer mediaPlayer, int i, int i1) {
+                if(i == mediaPlayer.MEDIA_INFO_BUFFERING_START){
+                    buffer.setVisibility(View.VISIBLE);
+                }else if(i == mediaPlayer.MEDIA_INFO_BUFFERING_END){
+                    buffer.setVisibility(View.INVISIBLE);
+                }
+
+                return false;
+            }
+        });
     }
 
     @Override
@@ -205,9 +248,36 @@ public class Stream extends AppCompatActivity implements SurfaceHolder.Callback,
             mediaPlayer.prepare();
             mediaPlayer.setOnPreparedListener(this);
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+            mediaController = new MediaController(this);
         }
         catch(Exception e){
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        releaseMediaPlayer();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        releaseMediaPlayer();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mediaPlayer.pause();
+    }
+
+    private void releaseMediaPlayer() {
+        if(mediaPlayer!= null){
+            mediaPlayer.release();
+            mediaPlayer = null;
         }
     }
 
@@ -219,5 +289,60 @@ public class Stream extends AppCompatActivity implements SurfaceHolder.Callback,
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
 
+    }
+
+    @Override
+    public void start() {
+        mediaPlayer.start();
+    }
+
+    @Override
+    public void pause() {
+        mediaPlayer.pause();
+    }
+
+    @Override
+    public int getDuration() {
+        return mediaPlayer.getDuration();
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        return mediaPlayer.getCurrentPosition();
+    }
+
+    @Override
+    public void seekTo(int i) {
+        mediaPlayer.seekTo(i);
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return mediaPlayer.isPlaying();
+    }
+
+    @Override
+    public int getBufferPercentage() {
+        return 0;
+    }
+
+    @Override
+    public boolean canPause() {
+        return true;
+    }
+
+    @Override
+    public boolean canSeekBackward() {
+        return true;
+    }
+
+    @Override
+    public boolean canSeekForward() {
+        return true;
+    }
+
+    @Override
+    public int getAudioSessionId() {
+        return mediaPlayer.getAudioSessionId();
     }
 }

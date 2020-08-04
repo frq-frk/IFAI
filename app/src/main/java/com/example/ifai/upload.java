@@ -1,5 +1,6 @@
 package com.example.ifai;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -19,7 +20,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -34,6 +37,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
@@ -78,6 +82,7 @@ public class upload extends AppCompatActivity {
         film_title = findViewById(R.id.film_name);
         username = findViewById(R.id.username);
         bar = findViewById(R.id.loading);
+        bar.setVisibility(View.GONE);
         submitted = findViewById(R.id.submitted);
         streaming = findViewById(R.id.streaming);
 
@@ -173,6 +178,7 @@ public class upload extends AppCompatActivity {
                 mLastClickTime = SystemClock.elapsedRealtime();
 
               bar.setVisibility(View.VISIBLE);
+              bar.setProgress(0);
              final StorageReference poster = mStorageRef.child("potsers").child(UID + UUID.randomUUID().toString());   //at first poster is saved in storage of firebase
              poster.putFile(poster_path).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                  @Override
@@ -183,7 +189,13 @@ public class upload extends AppCompatActivity {
                           public void onSuccess(Uri uri) {
                               poster_uri = uri.toString();                          //after successfull storage of uri into a string variable
                               final StorageReference film = mStorageRef.child("films").child(UID + UUID.randomUUID().toString());//we start to store the video file of the film in storage
-                              film.putFile(video_path).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                              film.putFile(video_path).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                  @Override
+                                  public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                                      double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                                      bar.setProgress((int) progress);
+                                  }
+                              }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                                   @Override
                                   public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) { //on successful storing we get the uri of video
                                           if(task.isSuccessful()){
@@ -214,7 +226,7 @@ public class upload extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(upload.this,MainActivity.class);//redirects to home instead of login
                 //to prevent onBackpressed, Security concern
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| intent.FLAG_ACTIVITY_CLEAR_TASK);//similar to no cache header in jsp
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);//similar to no cache header in jsp
                 startActivity(intent);
             }
         });
@@ -236,12 +248,26 @@ public class upload extends AppCompatActivity {
         reference.set(film).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(upload.this, "upload successful", Toast.LENGTH_SHORT).show();
+                dialogentry();
+            }
+        });
+
+    }
+
+    private void dialogentry() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Upload Successfull!!!");
+        builder.setCancelable(false);
+        builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent(upload.this,MainActivity.class);//after succesfull uploading we navigate to mainactivity coz I dont know how to refresh the same activity
                 startActivity(intent);
             }
         });
-
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
     }
 
 

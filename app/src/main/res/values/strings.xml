@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">IFAI</string>
     <string name="title_activity_login">Sign in</string>
     <string name="prompt_uname">username</string>
     <string name="prompt_password">Password</string>
@@ -18,4 +17,23 @@
     <string name="d_o_b">D.O.B :-</string>
     <string name="pick">Pick</string>
     <string name="sign_up">register</string>
+    <string name="views">Views :</string>
+    <string name="title">title</string>
+    <string name="maker">maker</string>
+    <string name="contact">contact</string>
+    <string name="enter_otp">enter otp</string>
+    <string name="verify">verify</string>
+    <string name="username">Username</string>
+    <string name="enter_description">Enter Description</string>
+    <string name="enter_the_film_title">Enter the film title</string>
+    <string name="choose_file">Choose file</string>
+    <string name="file_path">File path</string>
+    <string name="submit">Submit</string>
+    <string name="submitted_films">Submitted films</string>
+    <string name="streaming_films">Streaming films</string>
+    <string name="rules_and_regulations">About and proceddures of uploading. Rules and Regulations</string>
+    <string name="delete">delete</string>
+    <string name="accept">accept</string>
+    <string name="dob">enter your date of birth</string>
+    <string name="app_name">IFAI</string>
 </resources>

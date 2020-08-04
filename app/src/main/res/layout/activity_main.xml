@@ -16,7 +16,9 @@
 <!--        app:layout_constraintLeft_toLeftOf="parent"-->
 <!--        app:layout_constraintRight_toRightOf="parent"-->
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
-
+<androidx.cardview.widget.CardView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
     <LinearLayout
         android:layout_height="50dp"
         android:layout_width="match_parent"
@@ -24,15 +26,14 @@
 
         <TextView android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:text="IFAI"
-            android:textSize="30sp"
-            android:textColor="@color/colorAccent"
+            android:text="@string/app_name"
             android:layout_marginLeft="40dp"
             android:clickable="true"
             android:id="@+id/admin_link"
             android:onClick="admin_login"
             android:layout_marginStart="40dp"
-            android:focusable="true" />
+            android:focusable="true"
+            style="@style/heading"/>
 
         <ImageButton
             android:id="@+id/upload_btn"
@@ -41,8 +42,10 @@
             android:layout_gravity="end"
             android:background="#ffffff"
             android:layout_marginLeft="250dp"
-            android:src="@drawable/ic_file_upload_black_24dp" />
+            android:src="@drawable/ic_file_upload_black_24dp"
+            android:layout_marginStart="250dp" />
     </LinearLayout>
+</androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"

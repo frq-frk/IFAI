@@ -1,26 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".user_stream"
     android:background="@drawable/app_design_bg2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <SurfaceView
         android:id="@+id/surfView"
         android:layout_width="fill_parent"
-        android:layout_height="300dp"
-        android:padding="10dp"/>
+        android:layout_height="280dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"/>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buffering"
+        android:layout_gravity="center"
+        android:layout_marginTop="-195dp"
+        android:visibility="invisible"/>
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:layout_marginTop="160dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Views"/>
+            android:hint="@string/views"
+            style="@style/textview"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/views"
+            style="@style/textview"/>
+
 
     </LinearLayout>
 
@@ -34,30 +56,41 @@
             <ImageView
                 android:layout_height="160dp"
                 android:layout_width="130dp"
-                android:id="@+id/pstr"/>
+                android:id="@+id/pstr"
+                android:background="#000000"/>
             <TextView android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:hint="title"
+                android:hint="@string/title"
                 android:layout_gravity="center"
-                android:id="@+id/ttl"/>
+                android:id="@+id/ttl"
+                style="@style/title"/>
 
         </LinearLayout>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/mv_info"/>
+            android:id="@+id/mv_info"
+            style="@style/textview"/>
 
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/maker"/>
+        android:id="@+id/maker"
+        android:hint="@string/maker"
+        style="@style/title"
+        android:layout_marginTop="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/contact"/>
+        android:id="@+id/contact"
+        style="@style/textview"
+        android:hint="@string/contact"
+        android:layout_marginTop="10dp"/>
 
-</LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

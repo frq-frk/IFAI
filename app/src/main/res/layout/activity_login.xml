@@ -9,7 +9,9 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:background="@drawable/app_design_fg"
-    tools:context=".Login">
+    tools:context=".Login"
+    android:focusable="false"
+    android:focusableInTouchMode="true">
 
     <TextView
         android:layout_width="wrap_content"
@@ -18,7 +20,8 @@
         android:text="@string/instr_login"
         app:layout_constraintBottom_toTopOf="@+id/phone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/textview"/>
 
     <EditText
         android:id="@+id/phone"

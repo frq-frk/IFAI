@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private FirestoreRecyclerAdapter madapter;
     private LinearLayoutManager manager;
+
 
     boolean doubleBackToExitPressedOnce = false, clicked = false;
     int count=1;
@@ -56,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
 
 
+
+
+        streaming();
+
+
+
+
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        streaming();
+
     }
 
     //viewHolder class here
@@ -132,7 +141,11 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("uname",model.getUname());
                         intent.putExtra("film_uri",model.getFilm_uri());
                         intent.putExtra("poster_uri",model.getPoster_uri());
-                        startActivity(intent);
+                            int views = Integer.parseInt(model.getViews()) + 1;
+                            updateDatabase(views,model.getFilm_title());
+                            intent.putExtra("views", String.valueOf(views));
+                            startActivity(intent);
+
                     }
                 });
             }
@@ -140,6 +153,17 @@ public class MainActivity extends AppCompatActivity {
         mv_list.setAdapter(madapter);
         madapter.startListening();
     }
+
+    private void updateDatabase(int views, final String film_title) {
+
+        firestore.collection("streaming").document(film_title).update("views",views).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(MainActivity.this, "Playing " + film_title, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     @Override
     public void onBackPressed() {

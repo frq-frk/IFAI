@@ -26,5 +26,23 @@
         <item name="android:gravity">center_horizontal</item>
     </style>
 
+    <style name="heading" parent="TextAppearance.AppCompat.Headline">
+            <item name="android:textSize">30sp</item>
+            <item name="android:textColor">#000000</item>
+            <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="textview" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="title" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 
 </resources>
