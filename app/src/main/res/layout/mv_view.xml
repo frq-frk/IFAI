@@ -41,16 +41,30 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="description : "
+            style="@style/title"/>
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:id="@+id/description"/>
+        android:id="@+id/description"
+        style="@style/textview"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Maker :"
+            style="@style/title"/>
 
         <TextView
             android:layout_height="50dp"
             android:layout_width="match_parent"
             android:id="@+id/maker"
-            android:layout_marginTop="20dp"/>
+            android:layout_marginTop="10dp"
+            style="@style/textview"
+            android:textSize="20sp"/>
     </LinearLayout>
 
     </LinearLayout>

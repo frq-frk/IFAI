@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -129,6 +130,8 @@ public class upload extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(upload.this,MainActivity.class);
+                //to prevent onBackpressed, Security concern
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);//similar to no cache header in jsp
                 startActivity(intent);
             }
         });
@@ -177,45 +180,70 @@ public class upload extends AppCompatActivity {
                 }
                 mLastClickTime = SystemClock.elapsedRealtime();
 
-              bar.setVisibility(View.VISIBLE);
-              bar.setProgress(0);
-             final StorageReference poster = mStorageRef.child("potsers").child(UID + UUID.randomUUID().toString());   //at first poster is saved in storage of firebase
-             poster.putFile(poster_path).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                 @Override
-                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                  if(task.isSuccessful()){                                                  //when storing is successfull we get the uri of the poster we stored
-                      poster.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                          @Override
-                          public void onSuccess(Uri uri) {
-                              poster_uri = uri.toString();                          //after successfull storage of uri into a string variable
-                              final StorageReference film = mStorageRef.child("films").child(UID + UUID.randomUUID().toString());//we start to store the video file of the film in storage
-                              film.putFile(video_path).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                                  @Override
-                                  public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                                      double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                                      bar.setProgress((int) progress);
-                                  }
-                              }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                                  @Override
-                                  public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) { //on successful storing we get the uri of video
-                                          if(task.isSuccessful()){
-                                              film.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                                  @Override
-                                                  public void onSuccess(Uri uri) {
-                                                     film_uri = uri.toString();             //after storing the uri to string variable
-                                                     SaveDatatoFirestore();                 //we call a function which starts storing data into firestore
-                                                  }
-                                              });
-                                          }
-                                  }
-                              });
-                          }
-                      });
-                  }
-                 }
-             });
+                if(film_title.getText().toString().isEmpty()||description.getText().toString().isEmpty()||
+                video_path == null||poster_path == null){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(upload.this,R.style.dialog);
+                    builder.setTitle("Help!!!");
+                    String msg = "1) No field must be empty\n\n2) Choose picture as the poster of your film by clicking on the gallery image on side of description" +
+                            "\n\n3) click on chose file to select your completely edited final version of film to stream\n\n4) your film title must not be same as already existing one";
+                    builder.setMessage(msg);
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
 
+                    WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                    layoutParams.copyFrom(dialog.getWindow().getAttributes());
+                    layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+                    layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                    dialog.getWindow().setAttributes(layoutParams);
+                    dialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(upload.this, R.color.colorPrimary));
+                } else {
 
+                    bar.setVisibility(View.VISIBLE);
+                    bar.setProgress(0);
+                    final StorageReference poster = mStorageRef.child("potsers").child(UID + UUID.randomUUID().toString());   //at first poster is saved in storage of firebase
+                    poster.putFile(poster_path).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()) {                                                  //when storing is successfull we get the uri of the poster we stored
+                                poster.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        poster_uri = uri.toString();                          //after successfull storage of uri into a string variable
+                                        final StorageReference film = mStorageRef.child("films").child(UID + UUID.randomUUID().toString());//we start to store the video file of the film in storage
+                                        film.putFile(video_path).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                                                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                                                bar.setProgress((int) progress);
+                                            }
+                                        }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) { //on successful storing we get the uri of video
+                                                if (task.isSuccessful()) {
+                                                    film.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                        @Override
+                                                        public void onSuccess(Uri uri) {
+                                                            film_uri = uri.toString();             //after storing the uri to string variable
+                                                            SaveDatatoFirestore();                 //we call a function which starts storing data into firestore
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                }
             }
         });
 
@@ -223,11 +251,29 @@ public class upload extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(upload.this,MainActivity.class);//redirects to home instead of login
-                //to prevent onBackpressed, Security concern
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);//similar to no cache header in jsp
-                startActivity(intent);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(upload.this,R.style.dialog);
+                builder.setTitle("Confirmtion!!");
+                builder.setMessage("Are you sure about logging out?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        FirebaseAuth.getInstance().signOut();
+                        Intent intent = new Intent(upload.this,MainActivity.class);//redirects to home instead of login
+                        //to prevent onBackpressed, Security concern
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);//similar to no cache header in jsp
+                        startActivity(intent);
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorPrimary));
+                dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorPrimary));
             }
         });
 
@@ -255,7 +301,7 @@ public class upload extends AppCompatActivity {
     }
 
     private void dialogentry() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.dialog);
         builder.setTitle("Upload Successfull!!!");
         builder.setCancelable(false);
         builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
@@ -267,7 +313,7 @@ public class upload extends AppCompatActivity {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
-        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+        dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
     }
 
 

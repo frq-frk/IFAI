@@ -29,7 +29,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 public class Stream extends AppCompatActivity implements SurfaceHolder.Callback, MediaPlayer.OnPreparedListener,MediaController.MediaPlayerControl {
 
@@ -134,8 +133,8 @@ public class Stream extends AppCompatActivity implements SurfaceHolder.Callback,
 
                 AlertDialog dialog = builder.create();
                 dialog.show();
-                dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorAccent));
-                dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorAccent));
+                dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorPrimary));
+                dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorPrimary));
 
 
             }
@@ -166,8 +165,8 @@ public class Stream extends AppCompatActivity implements SurfaceHolder.Callback,
                 });
                 AlertDialog dialog = builder.create();
                 dialog.show();
-                dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorAccent));
-                dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorAccent));
+                dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorPrimary));
+                dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(view.getContext(), R.color.colorPrimary));
 
             }
         });
@@ -176,7 +175,8 @@ public class Stream extends AppCompatActivity implements SurfaceHolder.Callback,
 
     private void insertInStreaming() {
 
-        DocumentReference reference = firestore.collection("streaming").document(uid + UUID.randomUUID());
+        long v = 0;
+        DocumentReference reference = firestore.collection("streaming").document(uid + title);
         HashMap<String,Object>  film = new HashMap<>();
         film.put("film_title",title);
         film.put("description",description);
@@ -185,7 +185,7 @@ public class Stream extends AppCompatActivity implements SurfaceHolder.Callback,
         film.put("email",email);
         film.put("uname",uname);
         film.put("uid",uid);
-        film.put("views","0");
+        film.put("views",v);
         reference.set(film).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

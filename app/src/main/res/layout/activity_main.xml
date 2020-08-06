@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@drawable/app_design_bg2">
+    android:background="@color/colorPrimary">
 
 <!--    <Button-->
 <!--        android:layout_width="wrap_content"-->
@@ -17,12 +17,13 @@
 <!--        app:layout_constraintRight_toRightOf="parent"-->
 <!--        app:layout_constraintTop_toTopOf="parent" />-->
 <androidx.cardview.widget.CardView
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
         android:layout_height="50dp"
         android:layout_width="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="#0E0B16">
 
         <TextView android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -40,7 +41,7 @@
             android:layout_width="50dp"
             android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:background="#ffffff"
+            android:background="#0E0B16"
             android:layout_marginLeft="250dp"
             android:src="@drawable/ic_file_upload_black_24dp"
             android:layout_marginStart="250dp" />

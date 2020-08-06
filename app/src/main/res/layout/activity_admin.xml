@@ -5,13 +5,14 @@
     android:layout_height="match_parent"
     tools:context=".Admin"
     android:orientation="vertical"
-    android:background="@drawable/app_design_bg2">
+    android:background="@color/colorPrimary">
 
     <TextView
         android:layout_width="231dp"
         android:layout_height="wrap_content"
-        android:hint="Welcome Admin"
-        android:textSize="30sp" />
+        android:text="Welcome Admin"
+        android:textSize="30sp"
+        style="@style/title"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -19,14 +20,16 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Total Users : "
-        android:textSize="20sp" />
+        android:text="Total Users : "
+        android:textSize="20sp"
+        style="@style/textview"/>
         <TextView
             android:id="@+id/count"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:hint="00"
-            android:textSize="20sp"/>
+            android:text="00"
+            android:textSize="20sp"
+            style="@style/textview"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

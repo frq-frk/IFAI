@@ -38,11 +38,21 @@
             style="@style/title"/>
 
     </FrameLayout>
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/title"
+        android:text="description :"/>
         <TextView
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:id="@+id/mv_desc"/>
+            android:id="@+id/mv_desc"
+            style="@style/textview"/>
+</LinearLayout>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

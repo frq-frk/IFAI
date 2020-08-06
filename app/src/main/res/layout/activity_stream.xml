@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Stream"
-    android:background="@drawable/app_design_bg2">
+    android:background="@color/colorPrimary">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <SurfaceView
         android:id="@+id/surfView"
@@ -23,7 +26,7 @@
 
     <LinearLayout android:layout_height="200dp"
         android:layout_width="match_parent"
-        android:background="@color/card_bg"
+        android:background="@color/colorPrimary"
         android:layout_marginTop="150dp">
         <LinearLayout android:layout_height="match_parent"
             android:layout_width="130dp"
@@ -35,17 +38,27 @@
                 android:background="#000000"/>
             <TextView android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:hint="@string/title"
+                android:text="@string/title"
                 android:id="@+id/ttl"
                 style="@style/title"/>
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="description : "
+            style="@style/title"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/mv_info"
             style="@style/textview"/>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -68,5 +81,6 @@
         android:visibility="invisible"
         android:layout_gravity="center"
         android:id="@+id/bar"/>
+</LinearLayout>
 
-</androidx.appcompat.widget.LinearLayoutCompat>
+</ScrollView>

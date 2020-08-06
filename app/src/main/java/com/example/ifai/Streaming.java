@@ -2,12 +2,14 @@ package com.example.ifai;
 
 public class Streaming {
 
-     private String description,film_title,film_uri,poster_uri,uname,email,uid,views;
+     private String description,film_title,film_uri,poster_uri,uname,email,uid;
+
+     private long views;
 
     public Streaming() {
     }
 
-    public Streaming(String description, String film_title, String film_uri, String poster_uri, String uname, String email, String uid, String views) {
+    public Streaming(String description, String film_title, String film_uri, String poster_uri, String uname, String email, String uid, long views) {
         this.description = description;
         this.film_title = film_title;
         this.film_uri = film_uri;
@@ -18,11 +20,11 @@ public class Streaming {
         this.views = views;
     }
 
-    String getViews() {
+    public long getViews() {
         return views;
     }
 
-    public void setViews(String views) {
+    public void setViews(long views) {
         this.views = views;
     }
 

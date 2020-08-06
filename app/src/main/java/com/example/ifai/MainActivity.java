@@ -6,9 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,8 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
@@ -57,13 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         firestore = FirebaseFirestore.getInstance();
 
-
-
-
         streaming();
-
-
-
 
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,9 +95,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void setMaker(String uname) {
-            String maker = "maker : " + uname;
             TextView director = mview.findViewById(R.id.maker);
-            director.setText(maker);
+            director.setText(uname);
         }
 
         public void setDescription(String description) {
@@ -141,11 +136,12 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("uname",model.getUname());
                         intent.putExtra("film_uri",model.getFilm_uri());
                         intent.putExtra("poster_uri",model.getPoster_uri());
-                            int views = Integer.parseInt(model.getViews()) + 1;
-                            updateDatabase(views,model.getFilm_title());
-                            intent.putExtra("views", String.valueOf(views));
+//                        System.out.println(model.getViews() + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                            long views = model.getViews();
+                            updateDatabase(model.getFilm_title(),model.getUid());
+                            String v = String.valueOf(views);
+                            intent.putExtra("views", v);
                             startActivity(intent);
-
                     }
                 });
             }
@@ -154,21 +150,18 @@ public class MainActivity extends AppCompatActivity {
         madapter.startListening();
     }
 
-    private void updateDatabase(int views, final String film_title) {
+    private void updateDatabase(final String film_title, String uid) {
 
-        firestore.collection("streaming").document(film_title).update("views",views).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
+            firestore.collection("streaming").document(uid + film_title).update("views", FieldValue.increment(1));
                 Toast.makeText(MainActivity.this, "Playing " + film_title, Toast.LENGTH_SHORT).show();
-            }
-        });
+
     }
 
 
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
+            finish();
             return;
         }
 
@@ -196,12 +189,15 @@ public class MainActivity extends AppCompatActivity {
                 //todo the action here
                 //i.e open dialog prompting password
                 final EditText edittext = new EditText(view.getContext());
-                edittext.setBackgroundColor(R.color.colorPrimary);
+                edittext.setBackgroundResource(R.drawable.edittext_border);
+                edittext.setHeight(80);
                 edittext.setHint("Password");
                 edittext.setFocusable(true);
-                edittext.setTextColor(R.color.colorAccent);
+                edittext.setGravity(Gravity.CENTER);
+                edittext.setTextColor(R.color.white);
 
-                final AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+
+                final AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext(),R.style.dialog);
 
                 alert.setTitle("Welcome Admin");
                 alert.setMessage("Enter the password");
@@ -227,8 +223,14 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog dialog = alert.create();
                 dialog.show();
 
-                dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
-                dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                layoutParams.copyFrom(dialog.getWindow().getAttributes());
+                layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT;
+                layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                dialog.getWindow().setAttributes(layoutParams);
+
+                dialog.getButton(dialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+                dialog.getButton(dialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
             }else {
                 Toast.makeText(this, "you must be a user first to get admin access", Toast.LENGTH_SHORT).show();
             }

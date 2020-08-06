@@ -147,6 +147,8 @@ public class Admin extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(Admin.this,MainActivity.class);
+        //to prevent onBackpressed, Security concern
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_CLEAR_TASK);//similar to no cache header in jsp
         startActivity(intent);
     }
 }

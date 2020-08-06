@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".upload"
-    android:background="@drawable/app_design_bg2">
+    android:background="@color/colorPrimary">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,11 +17,12 @@
             android:layout_height="wrap_content">
         <LinearLayout
         android:layout_height="50dp"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+            android:background="#0E0B16">
         <ImageButton
             android:layout_height="50dp"
             android:layout_width="50dp"
-            android:background="#ffffff"
+            android:background="#0E0B16"
             android:src="@drawable/ic_keyboard_backspace_black_24dp"
             android:layout_gravity="start"
             android:id="@+id/back"/>
@@ -33,7 +34,8 @@
             android:textAlignment="center"
             android:id="@+id/username"
             android:textSize="30sp"
-            style="@style/title"/>
+            style="@style/title"
+            android:background="#0E0B16"/>
         <Button
             style="@style/buttons"
             android:text="@string/logout"
@@ -58,7 +60,12 @@
             android:gravity="center_horizontal"
             android:hint="@string/enter_description"
             android:id="@+id/desc"
-            android:inputType="text"/>
+            android:scrollbars="vertical"
+            android:maxLines="6"
+            android:lines="6"
+            android:minLines="2"
+            android:inputType="textMultiLine|textCapCharacters"
+            style="@style/edittexts"/>
     </LinearLayout>
 
         <EditText
@@ -85,12 +92,12 @@
         <TextView
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:background="@drawable/edittext_border"
             android:hint="@string/file_path"
             android:padding="10dp"
             android:gravity="center_vertical"
             android:layout_marginLeft="5dp"
-            android:id="@+id/file_path"/>
+            android:id="@+id/file_path"
+            style="@style/textview"/>
     </LinearLayout>
 
             <Button
@@ -110,7 +117,6 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
             android:text="@string/submitted_films"
-            android:background="#000000"
             android:textSize="20sp"
             android:textColor="#ffff"
             android:layout_marginTop="5dp"/>
@@ -124,7 +130,6 @@
             android:layout_width="match_parent"
             android:text="@string/streaming_films"
             android:textColor="#ffff"
-            android:background="#000000"
             android:textSize="20sp"/>
         <androidx.recyclerview.widget.RecyclerView
             android:layout_height="270dp"
